@@ -1,5 +1,6 @@
+require("dotenv").config();
 const express = require("express");
-const database = require("./utill/database");
+const connectDatabase = require("./config/database");
 const middleware = require("./middleware");
 const routes = require("./routes");
 
@@ -8,16 +9,12 @@ const app = express();
 middleware(app);
 routes(app);
 
-const PORT = 3000;
+const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, (err) => {
-  if (err) {
-    return console.log(err.message);
-  }
-  console.log(`Running on ${PORT}`);
+app.listen(PORT, () => {
+  console.log(`Server is running on ${PORT}`);
 });
 
-database
-  .connect()
-  .then(() => console.log(`Connected to database`))
-  .catch((err) => console.log(err.message));
+connectDatabase();
+
+module.exports = app;

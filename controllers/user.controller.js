@@ -1,7 +1,7 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const secretOrKey = require("../config/keys").secretOrKey;
+//const secretOrKey = require("../config/keys").secretOrKey;
 
 const signUp = (req, res) => {
   if (!req.body.fname) {
@@ -89,15 +89,6 @@ const login = (req, res) => {
           id: user.id,
           email: user.email,
         };
-        jwt.sign(payload, secretOrKey, (err, token) => {
-          if (err) throw err;
-          return res.send({
-            success: true,
-            message: "Token is assigned",
-            token: token,
-            user: user,
-          });
-        });
       } else {
         return res.status(400).json({
           success: false,
