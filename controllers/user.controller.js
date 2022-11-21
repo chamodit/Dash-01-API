@@ -39,8 +39,6 @@ const signUp = (req, res) => {
     });
   }
 
-  email = email.toLowercase();
-
   const newUser = new User(req.body);
 
   newUser.save().then((result) => {

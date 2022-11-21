@@ -9,12 +9,12 @@ const userSchema = new mongoose.Schema(
     lname: { type: String, required: true },
     email: {
       type: String,
-      validate: {
+      /*validate: {
         validator: function (val) {
           return /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(v);
         },
         message: "{VALUE} is not a valid Email!",
-      },
+      },*/
       required: true,
       unique: true,
     },
@@ -28,6 +28,7 @@ const userSchema = new mongoose.Schema(
       },
       required: [true, "User password required"],
     },
+    confirmPw: { type: String },
     saltSecret: String,
   },
   { timestamps: true }
