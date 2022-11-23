@@ -1,22 +1,23 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const Schema = mongoose.Schema;
 
-const userSchema = new mongoose.Schema(
+const UserSchema = new Schema(
   {
-    userId: { type: String, unique: true },
     fname: { type: String, required: true },
     lname: { type: String, required: true },
     email: {
       type: String,
-      /*validate: {
+      validate: {
         validator: function (val) {
           return /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(v);
         },
         message: "{VALUE} is not a valid Email!",
-      },*/
+      },
       required: true,
       unique: true,
+      lowercase: true,
     },
     password: {
       type: String,
@@ -54,4 +55,4 @@ userSchema.methods.generateJwt = function () {
   });
 };
 
-mongoose.model("user", userSchema);
+mongoose.model("User", UserSchema);
