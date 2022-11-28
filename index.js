@@ -1,22 +1,45 @@
-require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const cookieSession = require("cookie-session");
-const connectDatabase = require("./config/database");
-const middleware = require("./middleware");
-const routes = require("./routes");
+const dotenv = require('dotenv');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 
-middleware(app);
-routes(app);
+var corsOptions = {
+  origin: "http://localhost:4200"
+};
 
-const PORT = process.env.PORT || 5000;
+app.use(cors(corsOptions));
 
-app.listen(PORT, () => {
-  console.log(`Server is running on ${PORT}`);
+// parse requests of content-type - application/json
+app.use(express.json());
+
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
+
+const db = require("./app/models");
+db.mongoose
+  .connect(db.url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+  .then(() => {
+    console.log("Connected to the database!");
+  })
+  .catch(err => {
+    console.log("Cannot connect to the database!", err);
+    process.exit();
+  });
+
+// simple route
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to YTA application." });
 });
 
-connectDatabase();
+require("./app/routes/turorial.routes")(app);
 
-module.exports = app;
+// set port, listen for requests
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}.`);
+});
